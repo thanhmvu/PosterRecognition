@@ -1,0 +1,70 @@
+0000000000000000000000000000000000000000 a6b2511a566f77a0838dc1dd0d5f3e3c49a8faa0 Thanh Vu <vut@lafayette.edu> 1467999743 -0400	clone: from https://github.com/thanhmvu/darknet.git
+a6b2511a566f77a0838dc1dd0d5f3e3c49a8faa0 734d629439aa2285acc460f9b4ab695a324f8d62 Thanh Vu <vut@lafayette.edu> 1468000318 -0400	commit: Init trainPosRec
+734d629439aa2285acc460f9b4ab695a324f8d62 631a28f3c9932d89a49c02d36d9441dade8259a6 Thanh Vu <vut@lafayette.edu> 1468005010 -0400	commit: Rename database posters
+631a28f3c9932d89a49c02d36d9441dade8259a6 05647de3fcebd79e2f2f68f2009380fbd38d5d92 Thanh Vu <vut@lafayette.edu> 1468259529 -0400	commit: Working on script file for generating train images. Add method to create occlusions
+05647de3fcebd79e2f2f68f2009380fbd38d5d92 b95c1d48079ef7fd43857d91e310fc6984d2985f Thanh Vu <vut@lafayette.edu> 1468275383 -0400	commit: Add code for perspective transformation
+b95c1d48079ef7fd43857d91e310fc6984d2985f 6c61c2fee51a3d84099724621d76ef387d0a4806 Thanh Vu <vut@lafayette.edu> 1468342288 -0400	commit: Calculate the title's data for perspective transformation
+6c61c2fee51a3d84099724621d76ef387d0a4806 5ba85fcb690d3ed32efbf4606fb6deeb6cec2048 Thanh Vu <vut@lafayette.edu> 1468348574 -0400	commit: Make the code for saving images and labels a separate function
+5ba85fcb690d3ed32efbf4606fb6deeb6cec2048 96d3b4b8a7e656793c036718a144a19f0029ad98 Thanh Vu <vut@lafayette.edu> 1468435729 -0400	commit: Correct the height in perspectiveTransform
+96d3b4b8a7e656793c036718a144a19f0029ad98 6a026e24a775d353dcfe02d4c45ceca75b8e0f29 Thanh Vu <vut@lafayette.edu> 1468466321 -0400	commit: Import imgRotation.py
+6a026e24a775d353dcfe02d4c45ceca75b8e0f29 6b9a95697e8a181d3c42e00a9f437875bfed9ed3 Thanh Vu <vut@lafayette.edu> 1468474909 -0400	commit: Add code for rotation
+6b9a95697e8a181d3c42e00a9f437875bfed9ed3 2825c1681ca86077f5c56f161b9723b2ccf6dd4c Thanh Vu <vut@lafayette.edu> 1468477237 -0400	commit: Fix bug in getTitleBox. Add drawTitleBox method
+2825c1681ca86077f5c56f161b9723b2ccf6dd4c d1223b43ae2a2eff2a65c92cf4c783b70a79d921 Thanh Vu <vut@lafayette.edu> 1468478165 -0400	commit: Clean up. Comment
+d1223b43ae2a2eff2a65c92cf4c783b70a79d921 092163fa15d846b29067fe528354173bb96b1f7d Thanh Vu <vut@lafayette.edu> 1468519992 -0400	commit: Reorganize main program
+092163fa15d846b29067fe528354173bb96b1f7d 863615c7d80607e99e5a27a597057eab5aab3e31 Thanh Vu <vut@lafayette.edu> 1469030317 -0400	commit: Update the main flow
+863615c7d80607e99e5a27a597057eab5aab3e31 f6c09f36589369db778bc62844f516593041247c Thanh Vu <vut@lafayette.edu> 1469031555 -0400	commit: Minor change in addOcclusion. Rename, comment perpsective()
+f6c09f36589369db778bc62844f516593041247c 8240289838d8ed4c18b06d5e3ad0a6975f12d625 Thanh Vu <vut@lafayette.edu> 1469031826 -0400	commit: Add transformations.py from Christoph Gohlke as imgTrans.py
+8240289838d8ed4c18b06d5e3ad0a6975f12d625 0ff7764a852ac1df78aeac9a478de4a2ba032fb7 Thanh Vu <vut@lafayette.edu> 1469032029 -0400	commit: Rename files
+0ff7764a852ac1df78aeac9a478de4a2ba032fb7 89ec8484f4a0a3c9f6ee3c749349cea3c88e1ae7 Thanh Vu <vut@lafayette.edu> 1469066357 -0400	commit: Comment out one line in imgTrans.py to prevent warning
+89ec8484f4a0a3c9f6ee3c749349cea3c88e1ae7 dd99d0b7439524056fef87b1f67ff2a530fe2fbb Thanh Vu <vut@lafayette.edu> 1469123770 -0400	commit: Add more helper methods to utils.py
+dd99d0b7439524056fef87b1f67ff2a530fe2fbb 9a735425436187c01773bf6ae330f99f0230637a Thanh Vu <vut@lafayette.edu> 1469124578 -0400	commit: Re-implement perspective transformation
+9a735425436187c01773bf6ae330f99f0230637a 2e90519af7a2bda3d7965d351d874bff97ac66c3 Thanh Vu <vut@lafayette.edu> 1469128724 -0400	commit: Crop out redundant background after perspective transformation
+2e90519af7a2bda3d7965d351d874bff97ac66c3 473c5f5aa581a09537c53e1508c90249960bc038 Thanh Vu <vut@lafayette.edu> 1469151585 -0400	commit: Re-implement rotation
+473c5f5aa581a09537c53e1508c90249960bc038 a5e8a5e08cf376d7d7b975e75385f4ddeac3f979 Thanh Vu <vut@lafayette.edu> 1469201386 -0400	commit: Move imgRotation.py to temp
+a5e8a5e08cf376d7d7b975e75385f4ddeac3f979 8fcac244437c163a56b4dd0333d143defd7f373c Thanh Vu <vut@lafayette.edu> 1469204708 -0400	commit: Fix bug in perspective transformation: reversed y-range
+8fcac244437c163a56b4dd0333d143defd7f373c 2560d77892d510f6aadb72c19415656a7c1c27c1 Thanh Vu <vut@lafayette.edu> 1469207852 -0400	commit: Modify perspective range for more realistic pictures
+2560d77892d510f6aadb72c19415656a7c1c27c1 a22c5cacae1783109211eac17c435f190573e8c7 Thanh Vu <vut@lafayette.edu> 1469214291 -0400	commit: Add comments
+a22c5cacae1783109211eac17c435f190573e8c7 a50002bb8b051ed23296a53a45dfb22e95ea2ead Thanh Vu <vut@lafayette.edu> 1469218337 -0400	commit: Implement scaleAndTranslate method
+a50002bb8b051ed23296a53a45dfb22e95ea2ead 1d1ca07e5b4a439fe2448725ef5db6de9afd55c1 Thanh Vu <vut@lafayette.edu> 1469219300 -0400	commit: Fix out-of-bound title in scaleAndTranslate
+1d1ca07e5b4a439fe2448725ef5db6de9afd55c1 25cbe4588ecdc1ece40b7af33702480f521d7454 Thanh Vu <vut@lafayette.edu> 1469231720 -0400	commit: Implement blur method
+25cbe4588ecdc1ece40b7af33702480f521d7454 e52639dd2c2ed0ace4ef7a65219d4c49dbbebd6a Thanh Vu <vut@lafayette.edu> 1469384213 -0400	commit: Set up scripts to generate a testing training dataset
+e52639dd2c2ed0ace4ef7a65219d4c49dbbebd6a a43c084e4bb0427acfe9dc633b08b23c4c7ccb89 Thanh Vu <vut@lafayette.edu> 1469915475 -0400	commit: Change GPU = 1
+a43c084e4bb0427acfe9dc633b08b23c4c7ccb89 79176b3ec925e7770229e5f0604158b7effe053f Thanh Vu <vut@lafayette.edu> 1469915801 -0400	commit: Add notes
+79176b3ec925e7770229e5f0604158b7effe053f cbf23d57fc6a66cc036d3931b7ceb10f676c9104 Thanh Vu <vut@lafayette.edu> 1469916874 -0400	commit: Change LIB_RANGE format
+cbf23d57fc6a66cc036d3931b7ceb10f676c9104 b17f3e22e24dd41dcd4993881687daff38fcf968 Thanh Vu <vut@lafayette.edu> 1469917003 -0400	commit: Add code to generate labels
+b17f3e22e24dd41dcd4993881687daff38fcf968 608fdb4a393e798ea891d2c8b6254e264d6d2a8e Thanh Vu <vut@lafayette.edu> 1470020753 -0400	commit: Minor update to .gitignore
+608fdb4a393e798ea891d2c8b6254e264d6d2a8e 24222c637423145159a6b7009f810e8dfd86d9ca Thanh Vu <vut@lafayette.edu> 1470068709 -0400	commit: Fix CUDA core dum error
+24222c637423145159a6b7009f810e8dfd86d9ca 8119c1e17132593ca1eb21a84520c953cb638612 Thanh Vu <vut@lafayette.edu> 1470068811 -0400	commit: Print out some statistic
+8119c1e17132593ca1eb21a84520c953cb638612 6bb737eef283762846cd1d00f8d5d6b295d50ee7 Thanh Vu <vut@lafayette.edu> 1470081356 -0400	commit: Test yolo_poster
+6bb737eef283762846cd1d00f8d5d6b295d50ee7 c2d1d972a3783b36d20b6255f1733042a1b9a9fe Thanh Vu <vut@lafayette.edu> 1470424649 -0400	commit: Add lenet
+c2d1d972a3783b36d20b6255f1733042a1b9a9fe c82a19dcc0fd90c9ac6a10fb2a91b97067a80dfa Thanh Vu <vut@lafayette.edu> 1470424808 -0400	commit: Change source posters' zero padding from 3 to 6 digits
+c82a19dcc0fd90c9ac6a10fb2a91b97067a80dfa e01b9ef6c654cc127f8f7a5136767cdeb6942e79 Thanh Vu <vut@lafayette.edu> 1470427922 -0400	commit: Add and rename files for poster recognition
+e01b9ef6c654cc127f8f7a5136767cdeb6942e79 688b1d3c5b867389da2b9fd2908b512a8dc99def Thanh Vu <vut@lafayette.edu> 1470428630 -0400	commit: Add poster files to Makefile and darknet.c
+688b1d3c5b867389da2b9fd2908b512a8dc99def aaa2d30f3ba873b124c1dbfa1977b549fdfc8b66 Thanh Vu <vut@lafayette.edu> 1470434744 -0400	commit: Clean up poster code
+aaa2d30f3ba873b124c1dbfa1977b549fdfc8b66 4a7e6689d729b083c76bd41fa03ea0e03732079c Thanh Vu <vut@lafayette.edu> 1470508924 -0400	commit: Set up to train detection and classification fo 5 classes
+4a7e6689d729b083c76bd41fa03ea0e03732079c d40fe060f00c6c3ccdf5e381b1f802f8b0f954d6 Thanh Vu <vut@lafayette.edu> 1470550433 -0400	commit: Minor cleanup
+d40fe060f00c6c3ccdf5e381b1f802f8b0f954d6 2eb78d107cd65f908d69996508bb761a896764c4 Thanh Vu <vut@lafayette.edu> 1471461206 -0400	commit: Modify lenet
+2eb78d107cd65f908d69996508bb761a896764c4 95a13b32946a4757e416f83cd297c4ac2ee35dbc Thanh Vu <vut@lafayette.edu> 1471461300 -0400	commit: Refine script files
+95a13b32946a4757e416f83cd297c4ac2ee35dbc 0f595f7454be217cdd3c7bb73aa1f3ccd9b32360 Thanh Vu <vut@lafayette.edu> 1471461732 -0400	commit: Refine poster_detect.c
+0f595f7454be217cdd3c7bb73aa1f3ccd9b32360 b180722cc8e31fd3c2c9ee75c9809dd44c247ec8 Thanh Vu <vut@lafayette.edu> 1472763571 -0400	commit: Add a helper method
+b180722cc8e31fd3c2c9ee75c9809dd44c247ec8 5d31fe713990a9777729a0beaa4f218b8783a870 Thanh Vu <vut@lafayette.edu> 1474167847 -0400	commit: Add code to save images while validating
+5d31fe713990a9777729a0beaa4f218b8783a870 e8fa4751c5196695e82edc21493eb86be171c688 Thanh Vu <vut@lafayette.edu> 1474168063 -0400	commit: Fix 2 bugs in validate methodgit status
+e8fa4751c5196695e82edc21493eb86be171c688 655ee3990a150984a49a533c0756072b41dfdcbc Thanh Vu <vut@lafayette.edu> 1474168208 -0400	commit: Minor changes in script and src files
+655ee3990a150984a49a533c0756072b41dfdcbc 15987d3b1ce8e90bb07ad1fc84ec4a08179d6ca4 Thanh Vu <vut@lafayette.edu> 1474173987 -0400	commit: Add scripts to display detection results
+15987d3b1ce8e90bb07ad1fc84ec4a08179d6ca4 b8e5476df123abcee28f9a9e12207c50b8a4631f Thanh Vu <vut@lafayette.edu> 1474228367 -0400	commit: Display each test image in a separated table cell
+b8e5476df123abcee28f9a9e12207c50b8a4631f d06209b3658dfb7b2d7555879b240566b22bde69 Thanh Vu <vut@lafayette.edu> 1474228533 -0400	commit: Add script method for lighting and update rotation method
+d06209b3658dfb7b2d7555879b240566b22bde69 6a1c8d5925ec3352f54fb886a6aaf70d905ef5b9 Thanh Vu <vut@lafayette.edu> 1474228633 -0400	commit: Add method to retrieve image name without the extention jpg
+6a1c8d5925ec3352f54fb886a6aaf70d905ef5b9 7ae1567977e03c53d3c3f31373334f54e7bf6e0c Thanh Vu <vut@lafayette.edu> 1474228684 -0400	commit: Minor change: don't add .png when save an image
+7ae1567977e03c53d3c3f31373334f54e7bf6e0c 3697c052f2ac4680c475e393f549a8e28c55575c Thanh Vu <vut@lafayette.edu> 1474351507 -0400	commit: Modify displayResults
+3697c052f2ac4680c475e393f549a8e28c55575c 846daa41b1603d839e42138347a2bdef05cc6b66 Thanh Vu <vut@lafayette.edu> 1474351571 -0400	commit: Add helper method get_second_last
+846daa41b1603d839e42138347a2bdef05cc6b66 72c3a853cda25880822a058549b89a8b9bc2aa93 Thanh Vu <vut@lafayette.edu> 1474351777 -0400	commit: Modify saving images when validating
+72c3a853cda25880822a058549b89a8b9bc2aa93 b9ee1eb8508a01ce71ea33831dd842018df7f6e8 Thanh Vu <vut@lafayette.edu> 1474352026 -0400	commit: Modify config.py
+b9ee1eb8508a01ce71ea33831dd842018df7f6e8 397d548120ad163ca3d56b58f24620ab28b0b5df Thanh Vu <vut@lafayette.edu> 1474352154 -0400	commit: Little improvement for lighting method
+397d548120ad163ca3d56b58f24620ab28b0b5df 8ecebb2b348e5157bbbe82a0dded8590c248e1e9 Thanh Vu <vut@lafayette.edu> 1475728005 -0400	commit: Sort displayed folders
+8ecebb2b348e5157bbbe82a0dded8590c248e1e9 478be4fcaeb3de3bab79a36f46031e5af8bf006c Thanh Vu <vut@lafayette.edu> 1475728154 -0400	commit: Print out runtime
+478be4fcaeb3de3bab79a36f46031e5af8bf006c 898587a78aabc227e1b51bd2fa1eb7563ca974bd Thanh Vu <vut@lafayette.edu> 1475728398 -0400	commit: Extend the range of viewpoint and rotation. Reduce blur
+898587a78aabc227e1b51bd2fa1eb7563ca974bd c4a3ff07f1613eaca3db2d12adc4b36b164023c0 Thanh Vu <vut@lafayette.edu> 1475728594 -0400	commit: Output the loss to file. Resize output images
+c4a3ff07f1613eaca3db2d12adc4b36b164023c0 cea200b6e6ec87c792115e6060c8b1aed1a5fdae Thanh Vu <vut@lafayette.edu> 1477159811 -0400	commit: Using gaussiandistribution to create brightness blobs for lighting change
+cea200b6e6ec87c792115e6060c8b1aed1a5fdae fa60f3997ccda1df94fffb4ed2d2bcb38be437ab Thanh Vu <vut@lafayette.edu> 1480196133 -0500	commit: Disable nms. Append time to trainData.txt
+fa60f3997ccda1df94fffb4ed2d2bcb38be437ab 905e521c9a4586e24b649fe30298a39fb10aa314 Thanh Vu <vut@lafayette.edu> 1480196256 -0500	pull: Merge made by the 'recursive' strategy.
+905e521c9a4586e24b649fe30298a39fb10aa314 26f78afc24c733261c6dfec9bbd99e7a73af7866 Thanh Vu <vut@lafayette.edu> 1480199567 -0500	commit: Update scripts to generate train data for random classes. Adjust posterTrans
