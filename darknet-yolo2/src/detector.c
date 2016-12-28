@@ -150,6 +150,15 @@ char * get_second_last(char * path, char * dim){
 /*==================================== Main methods =====================================*/
 void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, int ngpus, int clear)
 {
+    // create trainData.txt
+    char dataFile[255];	
+    char t[100];
+    time_t now = time(0);
+    strftime (t, 100, "%Y%m%d-%H%M%S", localtime (&now));
+    sprintf(dataFile,"%s/trainData_%s.txt",getFolder(cfgfile),t);
+    FILE * file = fopen(dataFile, "w+");
+    
+    
     list *options = read_data_cfg(datacfg);
     char *train_images = option_find_str(options, "train", "data/train.list");
     char *backup_directory = option_find_str(options, "backup", "/backup/");
@@ -180,6 +189,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
 
     int imgs = net.batch * net.subdivisions * ngpus;
     printf("Learning Rate: %g, Momentum: %g, Decay: %g\n", net.learning_rate, net.momentum, net.decay);
+	fprintf(file, "Learning Rate: %g, Momentum: %g, Decay: %g\n", net.learning_rate, net.momentum, net.decay);
     data train, buffer;
 
     layer l = net.layers[net.n - 1];
@@ -273,6 +283,10 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
 
         i = get_current_batch(net);
         printf("%d: %f, %f avg, %f rate, %lf seconds, %d images\n", get_current_batch(net), loss, avg_loss, get_current_rate(net), sec(clock()-time), i*imgs);
+	    fprintf(file, "%d: %f, %f avg, %f rate, %lf seconds, %d images\n", i, loss, avg_loss, get_current_rate(net), sec(clock()-time), i*imgs);
+        if(i%1000==0 || (i < 1000 && i%100 == 0)){
+			fflush(file);
+		}
         if(i%1000==0 || (i < 1000 && i%100 == 0)){
 #ifdef GPU
             if(ngpus != 1) sync_nets(nets, ngpus, 0);
@@ -289,6 +303,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
     char buff[256];
     sprintf(buff, "%s/%s_final.weights", backup_directory, base);
     save_weights(net, buff);
+    fclose(file);
 }
 
 
