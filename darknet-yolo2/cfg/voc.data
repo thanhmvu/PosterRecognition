@@ -1,0 +1,7 @@
+classes= 20
+train  = /home/vut/PosterRecognition/DeepNet/database/YOLO/trainYOLO/train.txt
+backup = /home/vut/PosterRecognition/DeepNet/database/yolo2/backup-voc/
+
+valid  =/home/vut/PosterRecognition/DeepNet/database/YOLO/trainYOLO/2007_test.txt
+names = data/voc.names
+

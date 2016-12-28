@@ -1,0 +1,8 @@
+classes= 20
+train  = /home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/20C_2000P_trial1/randTrain.txt
+backup = /home/vut/PosterRecognition/DeepNet/database/yolo2/backup-cococfg/
+
+names = data/poster.names
+valid  = /home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/20C_trial1/test.txt
+#eval=coco
+

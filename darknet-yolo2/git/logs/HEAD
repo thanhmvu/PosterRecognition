@@ -1,0 +1,9 @@
+0000000000000000000000000000000000000000 2710d632571a0083f6b8aa57a3c822b57a9f4866 Thanh Vu <vut@lafayette.edu> 1482784954 -0500	clone: from https://github.com/pjreddie/darknet.git
+2710d632571a0083f6b8aa57a3c822b57a9f4866 bd82ecaf67ff155f036a33545ca8dfdfef0df90c thanhmvu <vut@lafayette.edu> 1482914046 -0500	commit: Activate gpu
+bd82ecaf67ff155f036a33545ca8dfdfef0df90c 60774f75f940981dd2494e2cb4eeecafe9c87ddd thanhmvu <vut@lafayette.edu> 1482914094 -0500	commit: Change paths for VOC
+60774f75f940981dd2494e2cb4eeecafe9c87ddd e55f13a4235b42310ec796fa8ca086b2be911ec2 thanhmvu <vut@lafayette.edu> 1482914277 -0500	commit: Add helper methods. Add multivalid method
+e55f13a4235b42310ec796fa8ca086b2be911ec2 2710d632571a0083f6b8aa57a3c822b57a9f4866 thanhmvu <vut@lafayette.edu> 1482914581 -0500	checkout: moving from master to 2710d632571a0083f6b8aa57a3c822b57a9f4866
+2710d632571a0083f6b8aa57a3c822b57a9f4866 bd82ecaf67ff155f036a33545ca8dfdfef0df90c thanhmvu <vut@lafayette.edu> 1482914735 -0500	checkout: moving from 2710d632571a0083f6b8aa57a3c822b57a9f4866 to bd82ecaf67ff155f036a33545ca8dfdfef0df90c
+bd82ecaf67ff155f036a33545ca8dfdfef0df90c 60774f75f940981dd2494e2cb4eeecafe9c87ddd thanhmvu <vut@lafayette.edu> 1482914815 -0500	checkout: moving from bd82ecaf67ff155f036a33545ca8dfdfef0df90c to 60774f75f940981dd2494e2cb4eeecafe9c87ddd
+60774f75f940981dd2494e2cb4eeecafe9c87ddd e55f13a4235b42310ec796fa8ca086b2be911ec2 thanhmvu <vut@lafayette.edu> 1482914894 -0500	checkout: moving from 60774f75f940981dd2494e2cb4eeecafe9c87ddd to e55f13a4235b42310ec796fa8ca086b2be911ec2
+e55f13a4235b42310ec796fa8ca086b2be911ec2 e55f13a4235b42310ec796fa8ca086b2be911ec2 thanhmvu <vut@lafayette.edu> 1482914964 -0500	checkout: moving from e55f13a4235b42310ec796fa8ca086b2be911ec2 to master
