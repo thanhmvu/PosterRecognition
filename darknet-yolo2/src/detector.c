@@ -12,6 +12,142 @@
 #endif
 static int coco_ids[] = {1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20,21,22,23,24,25,27,28,31,32,33,34,35,36,37,38,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,67,70,72,73,74,75,76,77,78,79,80,81,82,84,85,86,87,88,89,90};
 
+/*==================================== Helper methods =====================================*/
+
+void convert_poster_detections(float *predictions, int classes, int num, int square, int side, int w, int h, float thresh, float **probs, box *boxes, int only_objectness)
+{
+    int i,j,n;
+    for (i = 0; i < side*side; ++i){
+        int row = i / side;
+        int col = i % side;
+        for(n = 0; n < num; ++n){
+            int index = i*num + n;
+            int p_index = side*side*classes + i*num + n;
+            float scale = predictions[p_index];
+            int box_index = side*side*(classes + num) + (i*num + n)*4;
+            boxes[index].x = (predictions[box_index + 0] + col) / side * w;
+            boxes[index].y = (predictions[box_index + 1] + row) / side * h;
+            boxes[index].w = pow(predictions[box_index + 2], (square?2:1)) * w;
+            boxes[index].h = pow(predictions[box_index + 3], (square?2:1)) * h;
+            for(j = 0; j < classes; ++j){
+                int class_index = i*classes;
+                float prob = scale*predictions[class_index+j];
+                probs[index][j] = (prob > thresh) ? prob : 0;
+            }
+            if(only_objectness){
+                probs[index][0] = scale;
+            }
+        }
+    }
+}
+
+int updateCorrect(int num, float thresh, float **probs, int classes, char * path, int correct, int *arr){
+		float max_prob = 0; float max_prob2 = 0;
+		int max_class = -1; int max_class2 = -1;
+		int j;
+		for(j = 0; j < num; ++j){
+				int class = max_index(probs[j], classes);
+				float prob = probs[j][class];
+				if(prob > thresh){
+						if (prob> max_prob){
+								max_prob = prob;
+								max_class = class;
+						} else if (prob> max_prob2) {
+								max_prob2 = prob;
+								max_class2 = class; } } }
+	
+		// extract the class from the path, provided that the path's format is path/to/xxxxxx_yyyyyy.jpg, where xxxxxx is the class index.
+		int truthClass = get_poster_class(path); // in utils.c
+	
+		// Print and update
+		printf("==] THANH: image %s\n", path);
+		printf("1st poster: %d - %.0f%%,    2nd poster: %d - %.0f%%\n",  max_class, max_prob*100,max_class2, max_prob2*100);
+		arr[0] = max_class;
+		arr[1] = max_prob*100;
+		arr[2] = max_class2;
+		arr[3] = max_prob2*100;
+		
+		if (max_class == truthClass){ correct++; }
+		else{printf("====================================================== WRONG \n");}
+		return correct;
+}
+
+char * getFolder(char * path){
+	char d = 0;
+	char i;
+	for(i=0; path[i]!='\0'; ++i){
+		if(path[i]=='/'){ d = i; }
+	}
+	int length = d + 1;
+	char * folder = malloc(length);
+	memcpy(folder, path, length);
+	folder[length] = '\0';
+	return folder;
+}
+
+
+int get_poster_class(char * path){
+  // methods to extract the class from the path
+	// provided that the path's format is <path-to-image>/xxxxxx_yyyyyy.jpg
+	// where xxxxxx is the class index.
+	char* copy = malloc (1 + strlen(path));
+	strcpy(copy,path);
+	char* dim = "/._"; // divide string by "/","." and "_"
+	char* iterator = strtok(copy,dim);
+  char* buff = "-1"; 
+	char* class = "-1";
+	while(strcmp(iterator,"jpg") != 0){
+	    class = buff;
+	    buff = iterator;
+	    iterator = strtok(NULL,dim);
+	}
+// 	printf("Loaded %s, class %d\n",path,atoi(class));
+  return atoi(class);
+}
+
+char * get_file_name(char * path){
+	char* copy = malloc (1 + strlen(path));
+	strcpy(copy,path);
+	char* dim = "/"; // divide string by "/"
+	char* iterator = strtok(copy,dim);
+	char* name = "-1";
+	while(iterator != NULL){
+	    name = iterator;
+	    iterator = strtok(NULL,dim);
+	}
+// 	printf("Loaded %s, class %d\n",path,atoi(class));
+  return name;
+}
+
+char * get_image_name(char * path){
+	char* copy = malloc (1 + strlen(path));
+	strcpy(copy,path);
+	char* dim = "/."; // divide string by "/","."
+	char* iterator = strtok(copy,dim);
+	char* name = "-1";
+	while(strcmp(iterator,"jpg") != 0){
+	    name = iterator;
+	    iterator = strtok(NULL,dim);
+	}
+  return name;
+}
+
+char * get_second_last(char * path, char * dim){
+	char* copy = malloc (1 + strlen(path));
+	strcpy(copy,path);
+	char* iterator = strtok(copy,dim);
+	char* name = "-1";
+  char* buff = "-1"; 
+	while(iterator != NULL){
+	    name = buff;
+	    buff = iterator;
+	    iterator = strtok(NULL,dim);
+	}
+// 	printf("Loaded %s, class %d\n",path,atoi(class));
+  return name;
+}
+
+/*==================================== Main methods =====================================*/
 void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, int ngpus, int clear)
 {
     list *options = read_data_cfg(datacfg);
@@ -358,6 +494,234 @@ void validate_detector(char *datacfg, char *cfgfile, char *weightfile)
     fprintf(stderr, "Total Detection Time: %f Seconds\n", (double)(time(0) - start));
 }
 
+void multivalidate_detector()
+{
+//     int cfg_tipp = 2000; //train images per poster
+//     int cfg_classes = 30;
+//     int trial_idx = 2;
+    int start_weight = 4;
+    int end_weight = 7;
+    // whether to save images as visualization or not
+	int savingImg = 0;
+    
+    char *cfgfile= "cfg/poster-test.cfg";
+//     char *cfgfile= (char*)malloc(255 * sizeof(char));
+//     sprintf (cfgfile, "../../database/realworld/set2/randTrain/%dC_%dP_trial%d/poster_detect_%dc.cfg", cfg_classes, cfg_tipp, trial_idx, cfg_classes);
+  
+    char *valid_images = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/20C_trial1/test.txt";
+//     char *valid_images= (char*)malloc(255 * sizeof(char));
+//     sprintf (valid_images, "../../database/realworld/set2/randTest/%dC_trial%d/test.txt", cfg_classes, trial_idx);
+  
+    char *weightTemplate = "/home/vut/PosterRecognition/DeepNet/database/yolo2/backup-cococfg/poster_%d.weights";
+//     char *weightTemplate= (char*)malloc(255 * sizeof(char));
+// 	  sprintf (weightTemplate, "../../database/realworld/set2/randTrain/%dC_%dP_trial%d/backup/detect_weights/poster_detect_%dc_%s.weights", cfg_classes,cfg_tipp,trial_idx,cfg_classes,"\%d");
+    
+    char dataFile[255];	
+	char t[100];
+	time_t now = time(0);
+	strftime (t, 100, "%Y%m%d-%H%M%S", localtime (&now));
+	sprintf(dataFile,"%s/testData_%s.txt",getFolder(valid_images),t);
+	FILE * file = fopen(dataFile, "w+");
+    
+    fprintf(file, cfgfile); fprintf(file, "\n");
+	fprintf(file, valid_images); fprintf(file, "\n");
+    
+//     int j;
+//     list *options = read_data_cfg(datacfg);
+//     char *valid_images = option_find_str(options, "valid", "data/train.list");
+//     char *name_list = option_find_str(options, "names", "data/names.list");
+//     char *prefix = option_find_str(options, "results", "results");
+//     char **names = get_labels(name_list);
+//     char *mapf = option_find_str(options, "map", 0);
+    int *map = 0;
+//     if (mapf) map = read_map(mapf);
+    char *poster_names[100];
+
+    network net = parse_network_cfg(cfgfile);
+    
+    int weight_idx;
+    for(weight_idx=start_weight; weight_idx<=end_weight; weight_idx++){
+        int total = 0;
+        int correct = 0;
+        
+        int testWeight = weight_idx*1000;//testWeights[i]
+		char weightfile[255];
+		sprintf(weightfile,weightTemplate,testWeight);
+		fprintf(file, weightfile); fprintf(file, "\n");
+        
+        char results[255];
+		if(savingImg != 0){
+			// create folder to store output images
+			sprintf(results,"%sresults/",getFolder(cfgfile));
+			mkdir(results,0777);
+		}
+        
+        if(weightfile){
+            load_weights(&net, weightfile);
+        }
+        set_batch_network(&net, 1);
+        fprintf(stderr, "Learning Rate: %g, Momentum: %g, Decay: %g\n", net.learning_rate, net.momentum, net.decay);
+        srand(time(0));
+
+        char *base = "comp4_det_test_";
+        list *plist = get_paths(valid_images);
+        char **paths = (char **)list_to_array(plist);
+
+        layer l = net.layers[net.n-1];
+        int classes = l.classes;
+
+    //     char buff[1024];
+    //     char *type = option_find_str(options, "eval", "voc");
+    //     FILE *fp = 0;
+    //     FILE **fps = 0;
+    //     int coco = 0;
+    //     int imagenet = 0;
+    //     if(0==strcmp(type, "coco")){
+    //         snprintf(buff, 1024, "%s/coco_results.json", prefix);
+    //         fp = fopen(buff, "w");
+    //         fprintf(fp, "[\n");
+    //         coco = 1;
+    //     } else if(0==strcmp(type, "imagenet")){
+    //         snprintf(buff, 1024, "%s/imagenet-detection.txt", prefix);
+    //         fp = fopen(buff, "w");
+    //         imagenet = 1;
+    //         classes = 200;
+    //     } else {
+    //         fps = calloc(classes, sizeof(FILE *));
+    //         for(j = 0; j < classes; ++j){
+    //             snprintf(buff, 1024, "%s/%s%s.txt", prefix, base, names[j]);
+    //             fps[j] = fopen(buff, "w");
+    //         }
+    //     }
+
+        int j;
+        box *boxes = calloc(l.w*l.h*l.n, sizeof(box));
+        float **probs = calloc(l.w*l.h*l.n, sizeof(float *));
+        for(j = 0; j < l.w*l.h*l.n; ++j) probs[j] = calloc(classes, sizeof(float *));
+
+        int m = plist->size;
+        int i=0;
+        int t;
+
+        float thresh = .005;
+        float nms = .45;
+
+        int nthreads = 4;
+        image *val = calloc(nthreads, sizeof(image));
+        image *val_resized = calloc(nthreads, sizeof(image));
+        image *buf = calloc(nthreads, sizeof(image));
+        image *buf_resized = calloc(nthreads, sizeof(image));
+        pthread_t *thr = calloc(nthreads, sizeof(pthread_t));
+
+        load_args args = {0};
+        args.w = net.w;
+        args.h = net.h;
+        args.type = IMAGE_DATA;
+
+        for(t = 0; t < nthreads; ++t){
+            args.path = paths[i+t];
+            args.im = &buf[t];
+            args.resized = &buf_resized[t];
+            thr[t] = load_data_in_thread(args);
+        }
+        time_t start = time(0);
+        for(i = nthreads; i < m+nthreads; i += nthreads){
+            fprintf(stderr, "%d\n", i);
+            for(t = 0; t < nthreads && i+t-nthreads < m; ++t){
+                pthread_join(thr[t], 0);
+                val[t] = buf[t];
+                val_resized[t] = buf_resized[t];
+            }
+            for(t = 0; t < nthreads && i+t < m; ++t){
+                args.path = paths[i+t];
+                args.im = &buf[t];
+                args.resized = &buf_resized[t];
+                thr[t] = load_data_in_thread(args);
+            }
+            for(t = 0; t < nthreads && i+t-nthreads < m; ++t){
+                char *path = paths[i+t-nthreads];
+                char *id = basecfg(path);
+                float *X = val_resized[t].data;
+                network_predict(net, X);
+                int w = val[t].w;
+                int h = val[t].h;
+                get_region_boxes(l, w, h, thresh, probs, boxes, 0, map);
+                if (nms) do_nms_sort(boxes, probs, l.w*l.h*l.n, classes, nms);
+               
+//                 if (coco){
+//                     print_cocos(fp, path, boxes, probs, l.w*l.h*l.n, classes, w, h);
+//                 } else if (imagenet){
+//                     print_imagenet_detections(fp, i+t-nthreads+1, boxes, probs, l.w*l.h*l.n, classes, w, h);
+//                 } else {
+//                     print_detector_detections(fps, id, boxes, probs, l.w*l.h*l.n, classes, w, h);
+//                 }
+                
+                if(savingImg == 0){
+					int arr[4]; // array to store [best_match, best_prob, 2ndB_match, 2ndB_prob]
+					// Calculate the accuracy of classification using hardcored format of the path
+            	    correct = updateCorrect(l.w *l.h *l.n, thresh, probs, classes, path, correct, arr);
+				}else {
+					char * imgName = get_file_name(path);
+					char * classIdx = strtok(strdup(imgName),"_"); // split a copy of "imgName"
+					
+					// create folder "results/classIdx/" to store images of same class
+				    char classFolder[256]; // don't use char * to avoid segmentation fault
+					sprintf(classFolder,"%s%s/",results,classIdx);
+					mkdir(classFolder,0777);
+							
+					int lastCorrect = correct;
+					// Calculate the classification accuracy using HARDCODED path format
+				    int arr[4]; // array to store [best_match, best_prob, 2ndB_match, 2ndB_prob]
+					correct = updateCorrect(l.w *l.h *l.n, thresh, probs, classes,path, correct, arr);
+                    if (correct > lastCorrect){ // if correct, assign folder "1"
+                        sprintf(classFolder,"%s%s/",classFolder,"1");
+                    } else { // if not, assign folder "0"
+                        sprintf(classFolder,"%s%s/",classFolder,"0");
+                    }
+                    mkdir(classFolder,0777);
+                    image im = load_image_color(path,0,0);
+// 							draw_detections(im, l.side*l.side*l.n, thresh, boxes, probs, poster_names, poster_labels, classes);
+                    // fixed a crash here by removing poster_labels
+                    draw_detections(im, l.w*l.h*l.n, thresh, boxes, probs, poster_names, 0, classes);
+
+                    char imgToSave[256];
+                    sprintf(imgToSave, "%s%s_%d_%d_%d_%d.jpg", classFolder, get_image_name(path), 
+                                    arr[0], arr[1], arr[2], arr[3]);
+
+                    int h = 500;
+                    im = resize_image(im,h*im.w/im.h,h);
+                    save_image(im, imgToSave);
+                }
+                total++;
+                printf("Current detection accuracy: %.02f%%\n", correct*100.0/total);
+                
+                
+                
+                free(id);
+                free_image(val[t]);
+                free_image(val_resized[t]);
+            }
+        }
+        printf("Final detection accuracy: %.02f%%\n", correct*100.0/total);
+        fprintf(stderr, "Total Detection Time: %f Seconds\n", (double)(time(0) - start));
+		fprintf(file, "Detection accuracy: %.02f%%\n", correct*100.0/total);
+		
+		if(weight_idx%5==0){
+			fflush(file);
+        }
+//         for(j = 0; j < classes; ++j){
+//             if(fps) fclose(fps[j]);
+//         }
+//         if(coco){
+//             fseek(fp, -2, SEEK_CUR); 
+//             fprintf(fp, "\n]\n");
+//             fclose(fp);
+//         }
+//         fprintf(stderr, "Total Detection Time: %f Seconds\n", (double)(time(0) - start));
+    }
+    fclose(file);
+}
+
 void validate_detector_recall(char *cfgfile, char *weightfile)
 {
     network net = parse_network_cfg(cfgfile);
@@ -536,6 +900,7 @@ void run_detector(int argc, char **argv)
     if(0==strcmp(argv[2], "test")) test_detector(datacfg, cfg, weights, filename, thresh);
     else if(0==strcmp(argv[2], "train")) train_detector(datacfg, cfg, weights, gpus, ngpus, clear);
     else if(0==strcmp(argv[2], "valid")) validate_detector(datacfg, cfg, weights);
+    else if(0==strcmp(argv[2], "multivalid")) multivalidate_detector();
     else if(0==strcmp(argv[2], "recall")) validate_detector_recall(cfg, weights);
     else if(0==strcmp(argv[2], "demo")) {
         list *options = read_data_cfg(datacfg);
