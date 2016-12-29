@@ -148,21 +148,54 @@ char * get_second_last(char * path, char * dim){
 }
 
 /*==================================== Main methods =====================================*/
-void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, int ngpus, int clear)
+// void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, int ngpus, int clear)
+void train_detector(int *gpus, int ngpus, int clear)
 {
-    // create trainData.txt
+		int cfg_classes = 30;
+ 		int cfg_trial_idx = 1;
+		int cfg_imgs_per_class = 2000; //train images per poster
+		
+		char *cfg_train_dir = (char*)malloc(255 * sizeof(char));
+		char *cfg_train_dir_format = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_trial%d/"; 
+		sprintf(cfg_train_dir, cfg_train_dir_format, cfg_classes, cfg_imgs_per_class, cfg_trial_idx); 
+	
+		char *cfgfile = (char*)malloc(255 * sizeof(char));
+		sprintf(cfgfile, "%syolo2_%dc.cfg", cfg_train_dir, cfg_classes); 
+    
+		char *train_images = (char*)malloc(255 * sizeof(char));
+		sprintf(train_images, "%srandTrain.txt", cfg_train_dir);	
+	
+		char *backup_directory = (char*)malloc(255 * sizeof(char));
+		sprintf(backup_directory, "%sbackup/yolo2/", cfg_train_dir);	
+		mkdir(backup_directory, 0700);
+	
+		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/darknet19_448.conv.23";
+	
+//     list *options = read_data_cfg(datacfg);
+//     char *train_images = option_find_str(options, "train", "data/train.list");
+//     char *backup_directory = option_find_str(options, "backup", "/backup/");
+	
+    // create file to store train data
     char dataFile[255];	
     char t[100];
     time_t now = time(0);
     strftime (t, 100, "%Y%m%d-%H%M%S", localtime (&now));
-    sprintf(dataFile,"%s/trainData_%s.txt",getFolder(cfgfile),t);
+    sprintf(dataFile,"%strainYolo2_%s.txt", cfg_train_dir, t);
     FILE * file = fopen(dataFile, "w+");
-    
-    
-    list *options = read_data_cfg(datacfg);
-    char *train_images = option_find_str(options, "train", "data/train.list");
-    char *backup_directory = option_find_str(options, "backup", "/backup/");
-
+	
+		fprintf(file, "Number of classes: %d, Trial idx: %d, Number of images per class: %d\n", cfg_classes, cfg_trial_idx, cfg_imgs_per_class);
+		fprintf(file, "Config file: \n%s\n",cfgfile);
+		fprintf(file, "Train images: \n%s\n",train_images);
+		fprintf(file, "Backup dir: \n%s\n",backup_directory);
+		fprintf(file, "Input weights: \n%s\n\n",weightfile);
+	
+    printf("\nNumber of classes: %d, Trial idx: %d, Number of images per class: %d\n", cfg_classes, cfg_trial_idx, cfg_imgs_per_class);
+		printf("Config file: \n%s\n",cfgfile);
+		printf("Train images: \n%s\n",train_images);
+		printf("Backup dir: \n%s\n",backup_directory);
+		printf("Input weights: \n%s\n\n",weightfile);
+	
+	
     srand(time(0));
     char *base = basecfg(cfgfile);
     printf("%s\n", base);
@@ -916,7 +949,8 @@ void run_detector(int argc, char **argv)
     char *weights = (argc > 5) ? argv[5] : 0;
     char *filename = (argc > 6) ? argv[6]: 0;
     if(0==strcmp(argv[2], "test")) test_detector(datacfg, cfg, weights, filename, thresh);
-    else if(0==strcmp(argv[2], "train")) train_detector(datacfg, cfg, weights, gpus, ngpus, clear);
+//     else if(0==strcmp(argv[2], "train")) train_detector(datacfg, cfg, weights, gpus, ngpus, clear);
+		else if(0==strcmp(argv[2], "train")) train_detector(gpus, ngpus, clear);
     else if(0==strcmp(argv[2], "valid")) validate_detector(datacfg, cfg, weights);
     else if(0==strcmp(argv[2], "multivalid")) multivalidate_detector();
     else if(0==strcmp(argv[2], "recall")) validate_detector_recall(cfg, weights);
