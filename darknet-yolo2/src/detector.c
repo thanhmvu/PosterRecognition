@@ -147,10 +147,23 @@ char * get_second_last(char * path, char * dim){
   return name;
 }
 
-/*==================================== Main methods =====================================*/
+/*=======================================================================================*/
+/*===                                                                                 ===*/
+/*===                                  Main methods                                   ===*/
+/*===                                                                                 ===*/
+/*=======================================================================================*/
+
 // void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, int ngpus, int clear)
 void train_detector(int *gpus, int ngpus, int clear)
 {
+		/*
+		To train the net, need:
+			+ cfgfile
+			+ train_images path (train.txt)
+			+ backup path
+			+ weights
+		*/
+		
 		int cfg_classes = 30;
  		int cfg_trial_idx = 1;
 		int cfg_imgs_per_class = 2000; //train images per poster
