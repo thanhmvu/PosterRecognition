@@ -89,6 +89,7 @@ if not os.path.exists(CFG.LABEL_DIR): os.mkdir(CFG.LABEL_DIR)
 if not os.path.exists(CFG.BACKUP): os.mkdir(CFG.BACKUP)
 if not os.path.exists(CFG.BACKUP+'classify_weights/'): os.mkdir(CFG.BACKUP+'classify_weights/')
 if not os.path.exists(CFG.BACKUP+'detect_weights/'): os.mkdir(CFG.BACKUP+'detect_weights/')
+if not os.path.exists(CFG.BACKUP+'yolo2_weights/'): os.mkdir(CFG.BACKUP+'yolo2_weights/')
 
 
 # Loop through all ground images
@@ -147,13 +148,13 @@ print "Finished generating test data"
 
 
 """ ======================================== Prepare to train ======================================== """
-cfgfile_src = "../../../../database/realworld/set2/randTrain/cfg/poster_detect_%dc.cfg" % (CFG.CLASSES)
-cfgfile_dst = "../../../../database/realworld/set2/randTrain/%dC_%dP_%s/poster_detect_%dc.cfg" % (CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES)
-copyfile(cfgfile_src,cfgfile_dst)
+copyfile(CFG.CFGFILE_SRC,CFG.CFGFILE_DST)
 
-train_command = "./darknet -i X poster_detect train ../../database/realworld/set2/randTrain/%dC_%dP_%s/poster_detect_%dc.cfg ../../database/realworld/set2/randTrain/%dC_%dP_%s/randTrain.txt ../../database/realworld/set2/randTrain/%dC_%dP_%s/backup/detect_weights ../../database/extraction.conv.weights" % (CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE)
+# train_command = "./darknet -i X poster_detect train ../../database/realworld/set2/randTrain/%dC_%dP_%s/poster_detect_%dc.cfg ../../database/realworld/set2/randTrain/%dC_%dP_%s/randTrain.txt ../../database/realworld/set2/randTrain/%dC_%dP_%s/backup/detect_weights ../../database/extraction.conv.weights" % (CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE)
+train_command = "To train: \n=> Adjust params in train_detector method in detector.c;\n=> Run make;\n=> Run command: ./darknet detector train x x x -gpus 0 1 2 3"
 
-test_command = "./darknet -i X poster_detect valid ../../database/realworld/set2/randTrain/%dC_%dP_%s/poster_detect_%dc.cfg ../../database/realworld/set2/randTrain/%dC_%dP_%s/backup/detect_weights/poster_detect_%dc_%%d.weights ../../database/realworld/set2/randTest/%dC_%s/test.txt -saveImg 0" % (CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.CLASSES,CFG.NOTE)
+# test_command = "./darknet -i X poster_detect valid ../../database/realworld/set2/randTrain/%dC_%dP_%s/poster_detect_%dc.cfg ../../database/realworld/set2/randTrain/%dC_%dP_%s/backup/detect_weights/poster_detect_%dc_%%d.weights ../../database/realworld/set2/randTest/%dC_%s/test.txt -saveImg 0" % (CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.CLASSES,CFG.NOTE)
+test_command = "To validate: \n=> Adjust params in multivalid method in detector.c;\n=> Run make;\n=> Run command: ./darknet detector multivalid x x x"
 
 print "\n",train_command, "\n"
 print test_command, "\n"
