@@ -8,8 +8,8 @@ TOTAL_CLASSES = 100
 POSTERS = sorted(random.sample(xrange(TOTAL_CLASSES), CLASSES))
 NUM_VAR = 2000 # number of variation for each ground image
 
-CFGFILE_SRC = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg" % (CFG.CLASSES)
-CFGFILE_DST = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_%s/yolo2_%dc.cfg" % (CLASSES,NUM_VAR,NOTE,CLASSES)
+# CFGFILE_SRC = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg" % (CFG.CLASSES)
+# CFGFILE_DST = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_%s/yolo2_%dc.cfg" % (CLASSES,NUM_VAR,NOTE,CLASSES)
 
 SRC_DIR = '/home/vut/PosterRecognition/DeepNet/database/realworld/set2/src/'
 DST_DIR = '/home/vut/PosterRecognition/DeepNet/database/realworld/set2/%s/%dC_%dP_%s/' % (TASK,CLASSES,NUM_VAR,NOTE)

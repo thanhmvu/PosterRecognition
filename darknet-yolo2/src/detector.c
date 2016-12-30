@@ -164,7 +164,7 @@ void train_detector(int *gpus, int ngpus, int clear)
 			+ weights
 		*/
 		
-		int cfg_classes = 30;
+		int cfg_classes = 80;
  		int cfg_trial_idx = 1;
 		int cfg_imgs_per_class = 2000; //train images per poster
 		
@@ -173,7 +173,7 @@ void train_detector(int *gpus, int ngpus, int clear)
 		sprintf(cfg_train_dir, cfg_train_dir_format, cfg_classes, cfg_imgs_per_class, cfg_trial_idx); 
 	
 		char *cfgfile = (char*)malloc(255 * sizeof(char));
-		sprintf(cfgfile, "%syolo2_%dc.cfg", cfg_train_dir, cfg_classes); 
+		sprintf(cfgfile, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg", cfg_classes); 
     
 		char *train_images = (char*)malloc(255 * sizeof(char));
 		sprintf(train_images, "%srandTrain.txt", cfg_train_dir);	
@@ -359,8 +359,8 @@ void multivalidate_detector()
 		int cfg_classes = 20;
  		int cfg_trial_idx = 1;
 		int cfg_imgs_per_class = 2000; //train images per poster
-		int start_weight = 1;
-		int end_weight = 7;
+		int start_weight = 7;
+		int end_weight = 15;
 		
 		// whether to save images as visualization or not
 		int savingImg = 0;

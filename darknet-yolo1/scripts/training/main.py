@@ -148,7 +148,7 @@ print "Finished generating test data"
 
 
 """ ======================================== Prepare to train ======================================== """
-copyfile(CFG.CFGFILE_SRC,CFG.CFGFILE_DST)
+# copyfile(CFG.CFGFILE_SRC,CFG.CFGFILE_DST)
 
 # train_command = "./darknet -i X poster_detect train ../../database/realworld/set2/randTrain/%dC_%dP_%s/poster_detect_%dc.cfg ../../database/realworld/set2/randTrain/%dC_%dP_%s/randTrain.txt ../../database/realworld/set2/randTrain/%dC_%dP_%s/backup/detect_weights ../../database/extraction.conv.weights" % (CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE,CFG.CLASSES,CFG.NUM_VAR,CFG.NOTE)
 train_command = "To train: \n=> Adjust params in train_detector method in detector.c;\n=> Run make;\n=> Run command: ./darknet detector train x x x -gpus 0 1 2 3"
