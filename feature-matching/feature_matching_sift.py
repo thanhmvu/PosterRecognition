@@ -11,6 +11,7 @@ import glob
 import os
 from collections import Counter
 import datetime
+import random
 
 now = datetime.datetime.now()
 time = now.strftime("%Y-%m-%dT%H:%M:%S")
@@ -22,14 +23,16 @@ output_path = '/home/vut/PosterRecognition/DeepNet/database/featureMatching/resu
 # train_var = 1
 test_var = 5
 title_ratio = 0.2
-lib_size = 10; # number of training posters
-bsb_thres = 5 # threshold for Best Second Best filter
+CLASSES = 10
+TOTAL_CLASSES = 100
+POSTERS = sorted(random.sample(xrange(TOTAL_CLASSES), CLASSES))
 
 std_width = 500 # last max size was 300
 number_of_kp = 500
 number_of_out_imgs = 10 # ? is this used anywhere?
 colorDescriptor = False
 isFiltered = False
+bsb_thres = 5 # threshold for Best Second Best filter
 
 train_lib = [] # list of [file_name, keypoints, descriptors, image]
 des_lib = None # a matrix of all descriptors in the training library
@@ -228,7 +231,7 @@ def detectAndCompute_test(file, withColor):
 ### Define the training method
 def trainImage():
   # extract the descriptor for each training image
-  for objIdx in range (0, lib_size):
+  for objIdx in POSTERS:
     file = train_path + `objIdx`.zfill(6) +'.jpg'
     dnc = detectAndCompute(file, colorDescriptor) # Detect keypoints, compute descriptors
     if dnc is None: 
@@ -273,7 +276,7 @@ def retrieveImage(query_path,isFiltered):
   wrong_imgs_cnt = 0
   unclear_imgs_cnt = 0
   num_imgs_tested = 0
-  for objIdx in range (0, lib_size):
+  for objIdx in POSTERS:
     for imgIdx in range (0, test_var):
       file = query_path + `objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6) +'.jpg'
       dnc = detectAndCompute_test(file, colorDescriptor) # Detect keypoints, compute descriptors
@@ -341,8 +344,8 @@ def retrieveImage(query_path,isFiltered):
         acc = float(correct_retrievals + unclear_retrievals)/ num_imgs_tested
         print file + '\tAccuracy: %.2f    \t,Match Rate: %.2f' % (acc*100,mrate*100)
       
-  match_rate = float(correct_retrievals)/ (lib_size* test_var)
-  accuracy = float(correct_retrievals + unclear_retrievals)/ (lib_size* test_var)
+  match_rate = float(correct_retrievals)/ (CLASSES* test_var)
+  accuracy = float(correct_retrievals + unclear_retrievals)/ (CLASSES* test_var)
   print 'Final Accuracy: %.2f    \t,Match Rate: %.2f' % (acc*100,mrate*100)
   return (accuracy, match_rate, wrong_imgs, unclear_imgs)
       
@@ -357,11 +360,13 @@ if not os.path.exists(output_path): os.mkdir(output_path)
   
 text_out = output_path + 'outputData.txt'
 f = open(text_out,'w')
-f.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n\n' % (lib_size,number_of_kp,isFiltered,colorDescriptor)) 
+f.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n' % (CLASSES,number_of_kp,isFiltered,colorDescriptor)) 
+f.write("Poster indexes: " + ", ".join(str(e) for e in POSTERS) + "\n\n") 
 
 text_outS = output_path + 'outputData_summary.txt'
 fS = open(text_outS,'w')
-fS.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n\n' % (lib_size,number_of_kp,isFiltered,colorDescriptor)) 
+fS.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n' % (CLASSES,number_of_kp,isFiltered,colorDescriptor)) 
+fS.write("Poster indexes: " + ", ".join(str(e) for e in POSTERS) + "\n\n") 
 
 # query all images
 print query_path
