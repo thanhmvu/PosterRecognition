@@ -35,6 +35,9 @@ train_lib = [] # list of [file_name, keypoints, descriptors, image]
 des_lib = None # a matrix of all descriptors in the training library
 des_dict = [] # a look-up table for descriptors in des_lib: des_lib[des_index] = [img_index, img_des_index]
 
+detector = cv2.ORB(number_of_kp) # Initiate ORB detector
+bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False) # Create BFMatcher object
+
 ######################################## Methods #############################################
 ##############################################################################################
 
@@ -217,9 +220,6 @@ def detectAndCompute_test(file, withColor):
 
 
 ################################# Begining of main code ##################################
-detector = cv2.ORB(number_of_kp) # Initiate ORB detector
-bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False) # Create BFMatcher object
-
 ### Define the training method
 def trainImage():
   # extract the descriptor for each training image
@@ -326,7 +326,7 @@ def retrieveImage(query_path,isFiltered):
 
         # Save images of the result 
         if not colorDescriptor:
-          if ((img_path == correct_dir) and (correct_imgs_cnt <= 10)) or ((img_path == wrong_dir) and (wrong_imgs_cnt <= 10)) or ((img_path == unclear_dir) and (unclear_imgs_cnt <= 10)):
+          if ((img_path == correct_dir) and (correct_imgs_cnt <= number_of_out_imgs)) or ((img_path == wrong_dir) and (wrong_imgs_cnt <= number_of_out_imgs)) or ((img_path == unclear_dir) and (unclear_imgs_cnt <= number_of_out_imgs)):
             train_img_1 = train_lib[img_index]
             matches_1 = [dmatch for dmatch in matches if des_dict[dmatch.trainIdx][0] == img_index]
             outPath = img_path + `objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6) +'_'+ `img_index` + '.jpg'      
