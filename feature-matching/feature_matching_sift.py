@@ -130,7 +130,7 @@ def saveOutputImages(img1, kp1, img2, kp2, matches, outPath):
   # Sort them in the order of their distance.
   matches = sorted(matches, key = lambda x:x.distance)
   
-  # Draw first 10 matches.
+  # Draw first 20 matches.
   img3 = drawMatches(img1,kp1,img2,kp2,matches[:20])
 #   fig, ax = plt.subplots(figsize=(18, 2))
   #plt.figure(figsize=(15,15))
@@ -331,7 +331,7 @@ def retrieveImage(query_path,isFiltered):
 
         # Save images of the result 
         if not colorDescriptor:
-          if ((img_path == correct_dir) and (correct_imgs_cnt <= 10)) or ((img_path == wrong_dir) and (wrong_imgs_cnt <= 10)) or ((img_path == unclear_dir) and (unclear_imgs_cnt <= 10)):
+          if ((img_path == correct_dir) and (correct_imgs_cnt <= number_of_out_imgs)) or ((img_path == wrong_dir) and (wrong_imgs_cnt <= number_of_out_imgs)) or ((img_path == unclear_dir) and (unclear_imgs_cnt <= number_of_out_imgs)):
             train_img_1 = train_lib[img_index]
             matches_1 = [dmatch for dmatch in matches if des_dict[dmatch.trainIdx][0] == img_index]
             outPath = img_path + `objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6) +'_'+ `img_index` + '.jpg'      
