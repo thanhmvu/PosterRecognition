@@ -23,9 +23,10 @@ output_path = '/home/vut/PosterRecognition/DeepNet/database/featureMatching/resu
 # train_var = 1
 test_var = 5
 title_ratio = 0.2
-CLASSES = 10
+CLASSES = 100
 TOTAL_CLASSES = 100
 POSTERS = sorted(random.sample(xrange(TOTAL_CLASSES), CLASSES))
+# POSTERS = [0,1,2,3,4,5,6,7,8,9]
 
 std_width = 500 # last max size was 300
 number_of_kp = 500
@@ -231,8 +232,8 @@ def detectAndCompute_test(file, withColor):
 ### Define the training method
 def trainImage():
   # extract the descriptor for each training image
-  for objIdx in POSTERS:
-    file = train_path + `objIdx`.zfill(6) +'.jpg'
+  for objIdx in range(CLASSES):
+    file = train_path + `POSTERS[objIdx]`.zfill(6) +'.jpg'
     dnc = detectAndCompute(file, colorDescriptor) # Detect keypoints, compute descriptors
     if dnc is None: 
       print 'ERROR: Cannot read' + file
@@ -276,9 +277,9 @@ def retrieveImage(query_path,isFiltered):
   wrong_imgs_cnt = 0
   unclear_imgs_cnt = 0
   num_imgs_tested = 0
-  for objIdx in POSTERS:
+  for objIdx in range(CLASSES):
     for imgIdx in range (0, test_var):
-      file = query_path + `objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6) +'.jpg'
+      file = query_path + `POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6) +'.jpg'
       dnc = detectAndCompute_test(file, colorDescriptor) # Detect keypoints, compute descriptors
       if dnc is None: 
         print 'ERROR: Cannot read' + file
@@ -311,7 +312,7 @@ def retrieveImage(query_path,isFiltered):
               correct_imgs_cnt += 1
             else: 
               unclear_retrievals += 1
-              unclear_imgs.append((`objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6),best_img_1[0],best_img_2[0]))
+              unclear_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
               # prepare data to save output images
               img_path = unclear_dir
               img_index = best_img_2[0]
@@ -323,7 +324,7 @@ def retrieveImage(query_path,isFiltered):
             img_index = best_img_1[0]
             correct_imgs_cnt += 1  
         else:
-          wrong_imgs.append((`objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6),best_img_1[0],best_img_2[0]))
+          wrong_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
           # prepare data to save output images
           img_path = wrong_dir
           img_index = best_img_1[0]
@@ -334,7 +335,7 @@ def retrieveImage(query_path,isFiltered):
           if ((img_path == correct_dir) and (correct_imgs_cnt <= number_of_out_imgs)) or ((img_path == wrong_dir) and (wrong_imgs_cnt <= number_of_out_imgs)) or ((img_path == unclear_dir) and (unclear_imgs_cnt <= number_of_out_imgs)):
             train_img_1 = train_lib[img_index]
             matches_1 = [dmatch for dmatch in matches if des_dict[dmatch.trainIdx][0] == img_index]
-            outPath = img_path + `objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6) +'_'+ `img_index` + '.jpg'      
+            outPath = img_path + `POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6) +'_'+ `img_index` + '.jpg'      
             saveOutputImages(imgQ,kp,train_img_1[3],train_img_1[1],matches_1,outPath)
         else:
           print "[Can't save ouput images when using color descriptor]"
