@@ -297,45 +297,55 @@ def retrieveImage(query_path,isFiltered):
             if m.distance < 0.75*n.distance:
                 good.append(m)
         matches = good
+                
+        # check if any matched poster found
+        if(len(matches) == 0): 
+          unclear_retrievals += 1
+          unclear_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
+          # prepare data to save output images
+          img_path = unclear_dir
+          img_index = best_img_2[0]
+          unclear_imgs_cnt += 1
+          
+        else:
+          # Determine the retrieval images
+          out_imgs = [des_dict[match.trainIdx][0] for match in matches]      
+          f = Counter(out_imgs).most_common()
+          best_img_1 = f[0] # return (img_i, frequency)
+          best_img_2 = f[1] if len(f) > 1 else (-1,0)
 
-        # Determine the retrieval images
-        out_imgs = [des_dict[match.trainIdx][0] for match in matches]      
-        f = Counter(out_imgs).most_common()
-        best_img_1 = f[0] # return (img_i, frequency)
-        best_img_2 = f[1] if len(f) > 1 else (-1,0)
-
-        # Apply Best-Second-Best filter
-        img_path = ''
-        img_index = -1
-        if best_img_1[0] == objIdx:
-          if isFiltered:
-            diff = best_img_1[1] - best_img_2[1]
-            isGoodMatch = (diff * diff > bsb_thres * best_img_1[1])
-            if isGoodMatch: 
-              correct_retrievals += 1
+          # Apply Best-Second-Best filter
+          img_path = ''
+          img_index = -1
+          if best_img_1[0] == objIdx:
+            if isFiltered:
+              diff = best_img_1[1] - best_img_2[1]
+              isGoodMatch = (diff * diff > bsb_thres * best_img_1[1])
+              if isGoodMatch: 
+                correct_retrievals += 1
+                # prepare data to save output images
+                img_path = correct_dir
+                img_index = best_img_1[0]
+                correct_imgs_cnt += 1
+              else: 
+                unclear_retrievals += 1
+                unclear_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
+                # prepare data to save output images
+                img_path = unclear_dir
+                img_index = best_img_2[0]
+                unclear_imgs_cnt += 1
+            else:
+              correct_retrievals += 1  
               # prepare data to save output images
               img_path = correct_dir
               img_index = best_img_1[0]
-              correct_imgs_cnt += 1
-            else: 
-              unclear_retrievals += 1
-              unclear_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
-              # prepare data to save output images
-              img_path = unclear_dir
-              img_index = best_img_2[0]
-              unclear_imgs_cnt += 1
+              correct_imgs_cnt += 1  
           else:
-            correct_retrievals += 1  
+            wrong_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
             # prepare data to save output images
-            img_path = correct_dir
+            img_path = wrong_dir
             img_index = best_img_1[0]
-            correct_imgs_cnt += 1  
-        else:
-          wrong_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
-          # prepare data to save output images
-          img_path = wrong_dir
-          img_index = best_img_1[0]
-          wrong_imgs_cnt += 1
+            wrong_imgs_cnt += 1
 
         # Save images of the result 
         if not colorDescriptor:
