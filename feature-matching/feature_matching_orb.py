@@ -11,18 +11,23 @@ import glob
 import os
 from collections import Counter
 import datetime
+import random
 
 now = datetime.datetime.now()
 time = now.strftime("%Y-%m-%dT%H:%M:%S")
 
 train_path  = '/home/vut/PosterRecognition/DeepNet/database/realworld/set2/src/'
 query_path  = '/home/vut/PosterRecognition/DeepNet/database/realworld/set2/test/real_images/JPEGImages/'
-output_path = '/home/vut/PosterRecognition/DeepNet/database/desMatching/results/orb/orb_' + time + '/'
+output_path = '/home/vut/PosterRecognition/DeepNet/database/featureMatching/results/orb/orb_' + time + '/'
 
 # train_var = 1
 test_var = 5
 title_ratio = 0.2
-lib_size = 5; # number of training posters
+# lib_size = 5; # number of training posters
+CLASSES = 20
+TOTAL_CLASSES = 100
+POSTERS = sorted(random.sample(xrange(TOTAL_CLASSES), CLASSES))
+# POSTERS = [2,4,9,11,12,15,21,23,27,33,35,51,55,59,66,70,83,91,95,98]
 
 std_width = 1000 
 number_of_kp = 500
@@ -223,16 +228,16 @@ def detectAndCompute_test(file, withColor):
 ### Define the training method
 def trainImage():
   # extract the descriptor for each training image
-  for objIdx in range (0, lib_size):
-    file = train_path + `objIdx`.zfill(6) +'.jpg'
+  for objIdx in range(CLASSES):
+    file = train_path + `POSTERS[objIdx]`.zfill(6) +'.jpg'
     dnc = detectAndCompute_train(file, colorDescriptor) # Detect keypoints, compute descriptors
     if dnc is None: 
       print 'ERROR: Cannot read' + file
     else:
       kp, des, imgT = dnc # get the keypoints, descriptors, and the training image
-      print "the length of kp is ",len(kp)
-      print "the length of des is ",len(des)
-      print "the size of image is ",imgT.shape[0],imgT.shape[1]
+#       print "the length of kp is ",len(kp)
+#       print "the length of des is ",len(des)
+#       print "the size of image is ",imgT.shape[0],imgT.shape[1]
       train_lib.append([file,kp,des,imgT]) # store in an array 
       print "Generated descriptors for " + file
       
@@ -244,7 +249,7 @@ def trainImage():
   
   for img_i in range(1, len(train_lib)):
     train_des = train_lib[img_i][2]
-    print "the length of tran_des is ",len(train_des)
+#     print "the length of tran_des is ",len(train_des)
     # create des_lib
     des_lib = np.concatenate((des_lib,train_des), axis = 0)
     # create des_dict
@@ -271,9 +276,9 @@ def retrieveImage(query_path,isFiltered):
   wrong_imgs_cnt = 0
   unclear_imgs_cnt = 0
   num_imgs_tested = 0
-  for objIdx in range (0, lib_size):
+  for objIdx in range(CLASSES):
     for imgIdx in range (0, test_var):
-      file = query_path + `objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6) +'.jpg'
+      file = query_path + `POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6) +'.jpg'
       dnc = detectAndCompute_test(file, colorDescriptor) # Detect keypoints, compute descriptors
       if dnc is None: 
         print 'ERROR: Cannot read' + file
@@ -306,7 +311,7 @@ def retrieveImage(query_path,isFiltered):
               correct_imgs_cnt += 1
             else: 
               unclear_retrievals += 1
-              unclear_imgs.append((`objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6),best_img_1[0],best_img_2[0]))
+              unclear_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
               # prepare data to save output images
               img_path = unclear_dir
               img_index = best_img_2[0]
@@ -318,7 +323,7 @@ def retrieveImage(query_path,isFiltered):
             img_index = best_img_1[0]
             correct_imgs_cnt += 1  
         else:
-          wrong_imgs.append((`objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6),best_img_1[0],best_img_2[0]))
+          wrong_imgs.append((`POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6),POSTERS[best_img_1[0]],POSTERS[best_img_2[0]]))
           # prepare data to save output images
           img_path = wrong_dir
           img_index = best_img_1[0]
@@ -329,7 +334,7 @@ def retrieveImage(query_path,isFiltered):
           if ((img_path == correct_dir) and (correct_imgs_cnt <= number_of_out_imgs)) or ((img_path == wrong_dir) and (wrong_imgs_cnt <= number_of_out_imgs)) or ((img_path == unclear_dir) and (unclear_imgs_cnt <= number_of_out_imgs)):
             train_img_1 = train_lib[img_index]
             matches_1 = [dmatch for dmatch in matches if des_dict[dmatch.trainIdx][0] == img_index]
-            outPath = img_path + `objIdx`.zfill(6) +"_" +`imgIdx`.zfill(6) +'_'+ `img_index` + '.jpg'      
+            outPath = img_path + `POSTERS[objIdx]`.zfill(6) +"_" +`imgIdx`.zfill(6) +'_'+ `img_index` + '.jpg'      
             saveOutputImages(imgQ,kp,train_img_1[3],train_img_1[1],matches_1,outPath)
         else:
           print "[Can't save ouput images when using color descriptor]"
@@ -339,8 +344,10 @@ def retrieveImage(query_path,isFiltered):
         acc = float(correct_retrievals + unclear_retrievals)/ num_imgs_tested
         print file + '\tAccuracy: %.2f    \t,Match Rate: %.2f' % (acc*100,mrate*100)
       
-  match_rate = float(correct_retrievals)/ (lib_size* test_var)
-  accuracy = float(correct_retrievals + unclear_retrievals)/ (lib_size* test_var)
+  
+  match_rate = float(correct_retrievals)/ (CLASSES* test_var)
+  accuracy = float(correct_retrievals + unclear_retrievals)/ (CLASSES* test_var)
+  print 'Final Accuracy: %.2f    \t,Match Rate: %.2f' % (acc*100,mrate*100)
   return (accuracy, match_rate, wrong_imgs, unclear_imgs)
       
       
@@ -354,11 +361,13 @@ if not os.path.exists(output_path): os.mkdir(output_path)
   
 text_out = output_path + 'outputData.txt'
 f = open(text_out,'w')
-f.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n\n' % (lib_size,number_of_kp,isFiltered,colorDescriptor)) 
+f.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n\n' % (CLASSES,number_of_kp,isFiltered,colorDescriptor)) 
+f.write("Poster indexes: " + ", ".join(str(e) for e in POSTERS) + "\n\n")
 
 text_outS = output_path + 'outputData_summary.txt'
 fS = open(text_outS,'w')
-fS.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n\n' % (lib_size,number_of_kp,isFiltered,colorDescriptor)) 
+fS.write('Library size: %d \nNumber of keypoints per image: %d \nFiltered: %s \nColor descriptors: %s \n\n' % (CLASSES,number_of_kp,isFiltered,colorDescriptor)) 
+fS.write("Poster indexes: " + ", ".join(str(e) for e in POSTERS) + "\n\n")
 
 # query all images
 print query_path
