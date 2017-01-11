@@ -24,10 +24,10 @@ output_path = '/home/vut/PosterRecognition/DeepNet/database/featureMatching/resu
 test_var = 5
 title_ratio = 0.2
 # lib_size = 5; # number of training posters
-CLASSES = 20
+CLASSES = 10
 TOTAL_CLASSES = 100
 POSTERS = sorted(random.sample(xrange(TOTAL_CLASSES), CLASSES))
-# POSTERS = [2,4,9,11,12,15,21,23,27,33,35,51,55,59,66,70,83,91,95,98]
+# POSTERS = [0,1,2,3,4,5,6,7,8,9]
 
 std_width = 1000 
 number_of_kp = 500
@@ -288,7 +288,15 @@ def retrieveImage(query_path,isFiltered):
         kp, des, imgQ = dnc   
 
         # Match descriptors
-        matches = bf.match(des,des_lib) # The result is a list of DMatch objects
+#         matches = bf.match(des,des_lib) # The result is a list of DMatch objects
+        matches = bf.knnMatch(des,des_lib, k=2)
+  
+        # Apply ratio test
+        good = []
+        for m,n in matches:
+            if m.distance < 0.75*n.distance:
+                good.append(m)
+        matches = good
 
         # Determine the retrieval images
         out_imgs = [des_dict[match.trainIdx][0] for match in matches]      
