@@ -183,6 +183,7 @@ void train_detector(int *gpus, int ngpus, int clear)
 		mkdir(backup_directory, 0700);
 	
 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/darknet19_448.conv.23";
+// 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/100C_2000P_trial1/backup/yolo2_weights/yolo2_100c_23000.weights";
 	
 //     list *options = read_data_cfg(datacfg);
 //     char *train_images = option_find_str(options, "train", "data/train.list");
@@ -356,11 +357,11 @@ void train_detector(int *gpus, int ngpus, int clear)
 
 void multivalidate_detector()
 {
-		int cfg_classes = 80;
- 		int cfg_trial_idx = 2;
+		int cfg_classes = 50;
+ 		int cfg_trial_idx = 1;
 		int cfg_imgs_per_class = 2000; //train images per poster
-		int start_weight = 1;
-		int end_weight = 9;
+		int start_weight = 10;
+		int end_weight = 23; 
 		
 		// whether to save images as visualization or not
 		int savingImg = 0;
@@ -872,7 +873,7 @@ void validate_detector_recall(char *cfgfile, char *weightfile)
 void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh)
 {
     list *options = read_data_cfg(datacfg);
-    char *name_list = option_find_str(options, "names", "data/names.list");
+    char *name_list = option_find_str(options, "names", "data/poster.list");
     char **names = get_labels(name_list);
 
     image **alphabet = load_alphabet();

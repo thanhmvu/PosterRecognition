@@ -3,7 +3,7 @@ import random
 
 TASK = 'randTrain' # or 'test'
 NOTE = 'trial2'
-CLASSES = 80
+CLASSES = 50
 TOTAL_CLASSES = 100
 POSTERS = sorted(random.sample(xrange(TOTAL_CLASSES), CLASSES))
 NUM_VAR = 2000 # number of variation for each ground image
