@@ -373,7 +373,7 @@ void multivalidate_detector()
 		sprintf (cfgfile, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg", cfg_classes);
 	
 		char *valid_images= (char*)malloc(255 * sizeof(char));
-		sprintf (valid_images, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/%dC_%s/test.txt", cfg_classes, note);
+		sprintf (valid_images, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/%dC_%d_%s/test.txt", cfg_classes, cfg_imgs_per_class, note);
 
 		char *weightTemplate= (char*)malloc(255 * sizeof(char));
 		sprintf (weightTemplate, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_%s/backup/yolo2_weights/yolo2_%dc_%s.weights", cfg_classes,cfg_imgs_per_class,note,cfg_classes,"\%d");

@@ -127,18 +127,21 @@ print "Finished generating train data"
 
 
 """ ======================================== Generate test images ======================================== """
-NUM_OF_TEST_IMGS = 5
-src_img_dir = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/test/real_images/JPEGImages/"
-dst_test_dir = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/%dC_%s/" % (CFG.CLASSES, CFG.NOTE)
-
-if not os.path.exists(dst_test_dir): os.makedirs(dst_test_dir)
-dst_img_dir = dst_test_dir+"JPEGImages/"
+if not os.path.exists(CFG.DST_TEST_DIR): os.makedirs(CFG.DST_TEST_DIR)
+dst_img_dir = CFG.DST_TEST_DIR+"JPEGImages/"
 if not os.path.exists(dst_img_dir): os.makedirs(dst_img_dir)
 
-file = open(dst_test_dir+"test.txt","w")
+f = open(CFG.DST_TEST_DIR + 'data.txt','w')
+f.write("CLASSES: " + `CFG.CLASSES` + "\n")
+f.write("NUM_VAR: " + `CFG.NUM_VAR` + "\n")
+f.write("NUM_OF_TEST_IMGS: " + `CFG.NUM_OF_TEST_IMGS` + "\n")
+f.write("POSTERS: " + ", ".join(str(e) for e in CFG.POSTERS) + "\n")
+f.close()
+
+file = open(CFG.DST_TEST_DIR+"test.txt","w")
 for i,posterIdx in enumerate(CFG.POSTERS):
-	for imgIdx in range(NUM_OF_TEST_IMGS):
-		img_in = src_img_dir+ `posterIdx`.zfill(6)+"_"+ `imgIdx`.zfill(6)+".jpg"
+	for imgIdx in range(CFG.NUM_OF_TEST_IMGS):
+		img_in = CFG.SRC_IMG_DIR+ `posterIdx`.zfill(6)+"_"+ `imgIdx`.zfill(6)+".jpg"
 		img_out = dst_img_dir+ `i`.zfill(6)+"_"+ `imgIdx`.zfill(6)+".jpg"
 		copyfile(img_in, img_out)
 		file.write(img_out+"\n")
