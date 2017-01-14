@@ -164,13 +164,15 @@ void train_detector(int *gpus, int ngpus, int clear)
 			+ weights
 		*/
 		
-		int cfg_classes = 100;
- 		int cfg_trial_idx = 1;
-		int cfg_imgs_per_class = 2000; //train images per poster
+		int cfg_classes = 20;
+//  		int cfg_trial_idx = 1;
+// 		char * note = "nolight";
+		char * note = "trial1";
+		int cfg_imgs_per_class = 100; //train images per poster
 		
 		char *cfg_train_dir = (char*)malloc(255 * sizeof(char));
-		char *cfg_train_dir_format = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_trial%d/"; 
-		sprintf(cfg_train_dir, cfg_train_dir_format, cfg_classes, cfg_imgs_per_class, cfg_trial_idx); 
+		char *cfg_train_dir_format = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_%s/"; 
+		sprintf(cfg_train_dir, cfg_train_dir_format, cfg_classes, cfg_imgs_per_class, note); 
 	
 		char *cfgfile = (char*)malloc(255 * sizeof(char));
 		sprintf(cfgfile, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg", cfg_classes); 
@@ -197,13 +199,13 @@ void train_detector(int *gpus, int ngpus, int clear)
     sprintf(dataFile,"%strainYolo2_%s.txt", cfg_train_dir, t);
     FILE * file = fopen(dataFile, "w+");
 	
-		fprintf(file, "Number of classes: %d, Trial idx: %d, Number of images per class: %d\n", cfg_classes, cfg_trial_idx, cfg_imgs_per_class);
+		fprintf(file, "Number of classes: %d, Note: %s, Number of images per class: %d\n", cfg_classes, note, cfg_imgs_per_class);
 		fprintf(file, "Config file: \n%s\n",cfgfile);
 		fprintf(file, "Train images: \n%s\n",train_images);
 		fprintf(file, "Backup dir: \n%s\n",backup_directory);
 		fprintf(file, "Input weights: \n%s\n\n",weightfile);
 	
-    printf("\nNumber of classes: %d, Trial idx: %d, Number of images per class: %d\n", cfg_classes, cfg_trial_idx, cfg_imgs_per_class);
+    printf("\nNumber of classes: %d, Note: %s, Number of images per class: %d\n", cfg_classes, note, cfg_imgs_per_class);
 		printf("Config file: \n%s\n",cfgfile);
 		printf("Train images: \n%s\n",train_images);
 		printf("Backup dir: \n%s\n",backup_directory);
@@ -357,11 +359,12 @@ void train_detector(int *gpus, int ngpus, int clear)
 
 void multivalidate_detector()
 {
-		int cfg_classes = 50;
- 		int cfg_trial_idx = 1;
+		int cfg_classes = 20;
+//  		int cfg_trial_idx = 1;
+		char * note = "nolight";
 		int cfg_imgs_per_class = 2000; //train images per poster
-		int start_weight = 10;
-		int end_weight = 23; 
+		int start_weight = 1;
+		int end_weight = 12; 
 		
 		// whether to save images as visualization or not
 		int savingImg = 0;
@@ -370,10 +373,10 @@ void multivalidate_detector()
 		sprintf (cfgfile, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg", cfg_classes);
 	
 		char *valid_images= (char*)malloc(255 * sizeof(char));
-		sprintf (valid_images, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/%dC_trial%d/test.txt", cfg_classes, cfg_trial_idx);
+		sprintf (valid_images, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/%dC_%s/test.txt", cfg_classes, note);
 
 		char *weightTemplate= (char*)malloc(255 * sizeof(char));
-		sprintf (weightTemplate, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_trial%d/backup/yolo2_weights/yolo2_%dc_%s.weights", cfg_classes,cfg_imgs_per_class,cfg_trial_idx,cfg_classes,"\%d");
+		sprintf (weightTemplate, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_%s/backup/yolo2_weights/yolo2_%dc_%s.weights", cfg_classes,cfg_imgs_per_class,note,cfg_classes,"\%d");
 // 		sprintf (weightTemplate, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_trial%d/backup/yolo2_weights/poster_%%d.weights", cfg_classes, cfg_imgs_per_class, cfg_trial_idx);
     
 		char dataFile[255];	
@@ -384,13 +387,13 @@ void multivalidate_detector()
 		FILE * file = fopen(dataFile, "w+");
 	
 		fprintf(file, "=> Output test file: \n%s\n", dataFile);
-		fprintf(file, "=> Number of classes: %d \n=> Trial idx: %d, \n=> Number of images per class: %d \n=> Weights: %dk to %dk \n\n", cfg_classes, cfg_trial_idx, cfg_imgs_per_class, start_weight, end_weight);
+		fprintf(file, "=> Number of classes: %d \n=> Note: %s, \n=> Number of images per class: %d \n=> Weights: %dk to %dk \n\n", cfg_classes, note, cfg_imgs_per_class, start_weight, end_weight);
 		fprintf(file, "=> Config file: \n%s\n", cfgfile);
 		fprintf(file, "=> Validated images: \n%s\n", valid_images);
 		fprintf(file, "=> Input weight template: \n%s\n\n",weightTemplate);
 	
 		printf("=> Output test file: \n%s\n", dataFile);
-		printf("=> Number of classes: %d \n=> Trial idx: %d, \n=> Number of images per class: %d \n=> Weights: %dk to %dk \n\n", cfg_classes, cfg_trial_idx, cfg_imgs_per_class, start_weight, end_weight);
+		printf("=> Number of classes: %d \n=> Note: %s, \n=> Number of images per class: %d \n=> Weights: %dk to %dk \n\n", cfg_classes, note, cfg_imgs_per_class, start_weight, end_weight);
 		printf("=> Config file:\n %s\n", cfgfile);
 		printf("=> Validated images: \n%s\n", valid_images);
 		printf("=> Input weight template: \n%s\n\n",weightTemplate);
