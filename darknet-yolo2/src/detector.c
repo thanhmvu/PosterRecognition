@@ -166,9 +166,9 @@ void train_detector(int *gpus, int ngpus, int clear)
 		
 		int cfg_classes = 20;
 //  		int cfg_trial_idx = 1;
-// 		char * note = "nolight";
-		char * note = "trial1";
-		int cfg_imgs_per_class = 100; //train images per poster
+		char * note = "noblur";
+// 		char * note = "trial1";
+		int cfg_imgs_per_class = 2000; //train images per poster
 		
 		char *cfg_train_dir = (char*)malloc(255 * sizeof(char));
 		char *cfg_train_dir_format = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_%s/"; 
@@ -185,7 +185,7 @@ void train_detector(int *gpus, int ngpus, int clear)
 		mkdir(backup_directory, 0700);
 	
 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/darknet19_448.conv.23";
-// 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/100C_2000P_trial1/backup/yolo2_weights/yolo2_100c_23000.weights";
+// 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/20C_2000P_nolight/backup/yolo2_weights/yolo2_20c_13000.weights";
 	
 //     list *options = read_data_cfg(datacfg);
 //     char *train_images = option_find_str(options, "train", "data/train.list");
@@ -363,8 +363,8 @@ void multivalidate_detector()
 //  		int cfg_trial_idx = 1;
 		char * note = "nolight";
 		int cfg_imgs_per_class = 2000; //train images per poster
-		int start_weight = 1;
-		int end_weight = 12; 
+		int start_weight = 12;
+		int end_weight = 18; 
 		
 		// whether to save images as visualization or not
 		int savingImg = 0;
@@ -373,7 +373,7 @@ void multivalidate_detector()
 		sprintf (cfgfile, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg", cfg_classes);
 	
 		char *valid_images= (char*)malloc(255 * sizeof(char));
-		sprintf (valid_images, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/%dC_%d_%s/test.txt", cfg_classes, cfg_imgs_per_class, note);
+		sprintf (valid_images, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTest/%dC_%dP_%s/test.txt", cfg_classes, cfg_imgs_per_class, note);
 
 		char *weightTemplate= (char*)malloc(255 * sizeof(char));
 		sprintf (weightTemplate, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/%dC_%dP_%s/backup/yolo2_weights/yolo2_%dc_%s.weights", cfg_classes,cfg_imgs_per_class,note,cfg_classes,"\%d");
