@@ -164,10 +164,9 @@ void train_detector(int *gpus, int ngpus, int clear)
 			+ weights
 		*/
 		
-		int cfg_classes = 20;
-//  		int cfg_trial_idx = 1;
-		char * note = "noblur";
-// 		char * note = "trial1";
+		int cfg_classes = 100;
+// 		char * note = "noblur";
+		char * note = "trial2";
 		int cfg_imgs_per_class = 2000; //train images per poster
 		
 		char *cfg_train_dir = (char*)malloc(255 * sizeof(char));
@@ -184,8 +183,8 @@ void train_detector(int *gpus, int ngpus, int clear)
 		sprintf(backup_directory, "%sbackup/yolo2_weights/", cfg_train_dir);	
 		mkdir(backup_directory, 0700);
 	
-		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/darknet19_448.conv.23";
-// 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/20C_2000P_nolight/backup/yolo2_weights/yolo2_20c_13000.weights";
+// 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/darknet19_448.conv.23";
+		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/100C_2000P_trial2/backup/yolo2_weights/yolo2_100c_25000.weights";
 	
 //     list *options = read_data_cfg(datacfg);
 //     char *train_images = option_find_str(options, "train", "data/train.list");
@@ -359,12 +358,12 @@ void train_detector(int *gpus, int ngpus, int clear)
 
 void multivalidate_detector()
 {
-		int cfg_classes = 20;
+		int cfg_classes = 100;
 //  		int cfg_trial_idx = 1;
-		char * note = "nolight";
+		char * note = "trial2";
 		int cfg_imgs_per_class = 2000; //train images per poster
-		int start_weight = 12;
-		int end_weight = 18; 
+		int start_weight = 1;
+		int end_weight = 25; 
 		
 		// whether to save images as visualization or not
 		int savingImg = 0;
