@@ -11,6 +11,7 @@
 #include "opencv2/highgui/highgui_c.h"
 #endif
 static int coco_ids[] = {1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20,21,22,23,24,25,27,28,31,32,33,34,35,36,37,38,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,67,70,72,73,74,75,76,77,78,79,80,81,82,84,85,86,87,88,89,90};
+char *poster_names[] = {"000000", "000001", "000002", "000003", "000004", "000005", "000006", "000007", "000008", "000009", "000010", "000011", "000012", "000013", "000014", "000015", "000016", "000017", "000018", "000019", "000020", "000021", "000022", "000023", "000024", "000025", "000026", "000027", "000028", "000029", "000030", "000031", "000032", "000033", "000034", "000035", "000036", "000037", "000038", "000039", "000040", "000041", "000042", "000043", "000044", "000045", "000046", "000047", "000048", "000049", "000050", "000051", "000052", "000053", "000054", "000055", "000056", "000057", "000058", "000059", "000060", "000061", "000062", "000063", "000064", "000065", "000066", "000067", "000068", "000069", "000070", "000071", "000072", "000073", "000074", "000075", "000076", "000077", "000078", "000079", "000080", "000081", "000082", "000083", "000084", "000085", "000086", "000087", "000088", "000089", "000090", "000091", "000092", "000093", "000094", "000095", "000096", "000097", "000098", "000099"};
 
 /*==================================== Helper methods =====================================*/
 
@@ -166,7 +167,7 @@ void train_detector(int *gpus, int ngpus, int clear)
 		
 		int cfg_classes = 100;
 // 		char * note = "noblur";
-		char * note = "trial2";
+		char * note = "trial3";
 		int cfg_imgs_per_class = 2000; //train images per poster
 		
 		char *cfg_train_dir = (char*)malloc(255 * sizeof(char));
@@ -183,8 +184,8 @@ void train_detector(int *gpus, int ngpus, int clear)
 		sprintf(backup_directory, "%sbackup/yolo2_weights/", cfg_train_dir);	
 		mkdir(backup_directory, 0700);
 	
-// 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/darknet19_448.conv.23";
-		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/100C_2000P_trial2/backup/yolo2_weights/yolo2_100c_25000.weights";
+		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/darknet19_448.conv.23";
+// 		char *weightfile = "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/20C_2000P_trial1/backup/yolo2_weights/poster_15000.weights";
 	
 //     list *options = read_data_cfg(datacfg);
 //     char *train_images = option_find_str(options, "train", "data/train.list");
@@ -358,15 +359,15 @@ void train_detector(int *gpus, int ngpus, int clear)
 
 void multivalidate_detector()
 {
-		int cfg_classes = 100;
+		int cfg_classes = 20;
 //  		int cfg_trial_idx = 1;
-		char * note = "trial2";
+		char * note = "trial1";
 		int cfg_imgs_per_class = 2000; //train images per poster
-		int start_weight = 1;
-		int end_weight = 25; 
+		int start_weight = 34;
+		int end_weight = 34; 
 		
 		// whether to save images as visualization or not
-		int savingImg = 0;
+		int savingImg = 1;
 	
 		char *cfgfile= (char*)malloc(255 * sizeof(char));
 		sprintf (cfgfile, "/home/vut/PosterRecognition/DeepNet/database/realworld/set2/randTrain/cfg-yolo2/yolo2_%dc.cfg", cfg_classes);
@@ -406,7 +407,6 @@ void multivalidate_detector()
 //     char *mapf = option_find_str(options, "map", 0);
     int *map = 0;
 //     if (mapf) map = read_map(mapf);
-    char *poster_names[100];
 
     network net = parse_network_cfg(cfgfile);
     
@@ -542,7 +542,8 @@ void multivalidate_detector()
 
 										int lastCorrect = correct;
 										// Calculate the classification accuracy using HARDCODED path format
-										int arr[4]; // array to store [best_match, best_prob, 2ndB_match, 2ndB_prob]
+										// array to store [best_match, best_prob, 2ndB_match, 2ndB_prob]
+										int arr[4]; 
 										correct = updateCorrect(l.w *l.h *l.n, thresh, probs, classes,path, correct, arr);
 										if (correct > lastCorrect){ // if correct, assign folder "1"
 												sprintf(classFolder,"%s%s/",classFolder,"1");
