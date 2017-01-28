@@ -207,10 +207,14 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             rgb[2] = blue;
             box b = boxes[i];
 
-            int left  = (b.x-b.w/2.)*im.w;
-            int right = (b.x+b.w/2.)*im.w;
-            int top   = (b.y-b.h/2.)*im.h;
-            int bot   = (b.y+b.h/2.)*im.h;
+//             int left  = (b.x-b.w/2.)*im.w;
+//             int right = (b.x+b.w/2.)*im.w;
+//             int top   = (b.y-b.h/2.)*im.h;
+//             int bot   = (b.y+b.h/2.)*im.h;
+            int left  = (b.x-b.w/2.);
+            int right = (b.x+b.w/2.);
+            int top   = (b.y-b.h/2.);
+            int bot   = (b.y+b.h/2.);
 
             if(left < 0) left = 0;
             if(right > im.w-1) right = im.w-1;

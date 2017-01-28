@@ -359,12 +359,12 @@ void train_detector(int *gpus, int ngpus, int clear)
 
 void multivalidate_detector()
 {
-		int cfg_classes = 20;
+		int cfg_classes = 100;
 //  		int cfg_trial_idx = 1;
 		char * note = "trial1";
 		int cfg_imgs_per_class = 2000; //train images per poster
-		int start_weight = 34;
-		int end_weight = 34; 
+		int start_weight = 80;
+		int end_weight = 80; 
 		
 		// whether to save images as visualization or not
 		int savingImg = 1;
@@ -554,7 +554,8 @@ void multivalidate_detector()
 										image im = load_image_color(path,0,0);
 										// fixed a crash here by removing poster_labels
 										// draw_detections(im, l.side*l.side*l.n, thresh, boxes, probs, poster_names, poster_labels, classes);
-										draw_detections(im, l.w*l.h*l.n, thresh, boxes, probs, poster_names, 0, classes);
+										// use thresh = .1 to reduce boxes drawn
+										draw_detections(im, l.w*l.h*l.n, .1, boxes, probs, poster_names, 0, classes);
 
 										char imgToSave[256];
 										sprintf(imgToSave, "%s%s_%d_%d_%d_%d.jpg", classFolder, get_image_name(path), arr[0], arr[1], arr[2], arr[3]);
