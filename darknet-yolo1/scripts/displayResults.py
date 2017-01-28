@@ -1,9 +1,9 @@
 import glob
 
-train_path = "./src/";
+train_path = "../src/";
 result_path = "./results/";
 h = 100;
-b = 1;
+b = 5;
 
 def css():
 	f = open("style.css","w")
@@ -69,8 +69,8 @@ def display(resultDir,trainDir):
 	for folder in sorted(glob.glob(resultDir + "*")):
 		classIdx = folder.split("/")[-1]
 		trainImg = trainDir + classIdx + ".jpg";
-		correctImgs = sorted(glob.glob(folder + "/1/*"));
-		incorrectImgs = sorted(glob.glob(folder + "/0/*"));
+		correctImgs = glob.glob(folder + "/1/*");
+		incorrectImgs = glob.glob(folder + "/0/*");
 		resultTable += """
 		<tr>
 			<th>"""+ classIdx +"""</th>
@@ -88,7 +88,11 @@ def display(resultDir,trainDir):
 
 	accuracy = totalCorrectImgs*1.0/(totalCorrectImgs +	totalIncorrectImgs)
 	resultTable += "</table>\n"
-	contents = "Total accuracy: " +`accuracy*100` +"%<br><br>" +resultTable
+
+	contents = """Blue border = Correct detection <br>
+	Red border = Incorrect detection <br>
+	<br>
+	Total accuracy: """ +`accuracy*100` +"%<br>" +resultTable
 	
 	css()
 	html(contents)
