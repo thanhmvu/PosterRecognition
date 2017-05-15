@@ -160,9 +160,9 @@ void train_detector(int *gpus, int ngpus, int clear)
 		/*
 		To train the net, need:
 			+ cfgfile
-			+ train_images path (train.txt)
+			+ train_images path: randTrain.txt
 			+ backup path
-			+ weights
+			+ weights: darknet19_448.conv.23
 		*/
 		
 		int cfg_classes = 100;
