@@ -1,12 +1,9 @@
 # PosterRecognition
 
-yolo 1 + yolo 2
+Image recognition has been one of the most well researched tasks in computer vision. Traditionally this is done by comparing features extracted from query images to those extracted from an image database. Despite producing state of the art results for many types of objects, this approach does not generalize to all domains. In this project, we address one such domain: academic poster recognition. Since the traditional approach of feature matching fails, we present a new approach based on object detection using convolutional neural network. This approach outperforms the traditional ones.
 
-Using deep neural network ([Darknet YOLO](http://pjreddie.com/darknet/)) for academic poster recognition. This repo is for a Lafayette EXCEL research with Dr. Amir Sadovnik.
 
-INSTRUCTIONS
-
-## Server side
+## Server Directory
 
 On the server side, the tree view for some important folders inside the project root `/home/vut/PosterRecognition/` is as follows.
 ```
@@ -131,7 +128,7 @@ Generate training and testing data:
 
 	a. The params should match those used for training   
     
-	c. To save images as visualization while validating, set `savingImg = 1` (see [Visualization](#visualization) section below). If validating many weight files, set savingImg to 0 to save runtime.   
+	c. To save images as visualization while validating, set `savingImg = 1` (see [Visualization](#visualization) section below). If validating many weight files, set `savingImg` to 0 to save runtime.   
     
 	b. Ex: 	
     
@@ -170,4 +167,13 @@ Generate training and testing data:
 4. Run: `python displayResults.py`
 
 5. The output visualization is `results.html`
+
+## Feature Matching
+To run the traditional feature matching methods for comparison:
+1. Move to [feature-matching](https://github.com/thanhmvu/PosterRecognition/tree/master/feature-matching) folder: `cd <project-root>/DeepNet/darknet/PosterRecognition/feature-matching`
+
+2. For ORB, run: python feature_matching_orb.py
+
+3. For SIFT, run: python feature_matching_sift.py
+
 
