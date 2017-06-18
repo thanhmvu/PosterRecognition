@@ -2,8 +2,9 @@
 
 Image recognition has been one of the most well researched tasks in computer vision. Traditionally this is done by comparing features extracted from query images to those extracted from an image database. Despite producing state of the art results for many types of objects, this approach does not generalize to all domains. In this project, we address one such domain: academic poster recognition. Since the traditional approach of feature matching fails, we present a new approach based on object detection using convolutional neural network. This approach outperforms the traditional ones.
 
-Academic poster of this research: [here](https://drive.google.com/file/d/0B4dOg-7qH-2jNlhqT0RUbzlpVW8/view)  
 Keywords: Poster recognition, Image Retrieval, Deep Neural Network, OpenCV, Python, C  
+
+**Here is the [poster](https://drive.google.com/file/d/0B4dOg-7qH-2jNlhqT0RUbzlpVW8/view) of the research**
 
 
 ## Server Directory
